@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:rest_api_http/services/api_service.dart";
+
+import "model/posts_model.dart";
 
 void main() {
   runApp(const MyApp());
@@ -24,8 +27,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<void> getData() async {
-    // return await;
+  Future<List<PostsModel>> getData() async {
+    return ApiServices().getPosts();
   }
 
   @override
@@ -38,15 +41,17 @@ class _HomeState extends State<Home> {
         future: getData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.hasError}");
           }
+          final List<PostsModel>? postModels = snapshot.data;
           return ListView.builder(
             itemBuilder: (context, index) {
+              PostsModel postModel = postModels![index];
               return Card(
                 child: ListTile(
-                  title: const Text("data"),
+                  title: Text("${postModel.title}"),
                   trailing: IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.delete),
@@ -59,7 +64,9 @@ class _HomeState extends State<Home> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          ApiServices().postData();
+        },
         child: const Icon(Icons.add),
       ),
     );
