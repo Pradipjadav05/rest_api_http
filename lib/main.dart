@@ -56,6 +56,9 @@ class _HomeState extends State<Home> {
                     onPressed: () {},
                     icon: const Icon(Icons.delete),
                   ),
+                  onTap: (){
+                    ApiServices().putData();
+                  },
                 ),
               );
             },

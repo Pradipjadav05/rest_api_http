@@ -29,8 +29,8 @@ class ApiServices {
       userId: 1,
     );
 
-    var response =
-        await http.post(Uri.parse(postsAPI), body: jsonEncode(newPostMode.toJson()));
+    var response = await http.post(Uri.parse(postsAPI),
+        body: jsonEncode(newPostMode.toJson()));
 
     if (response.statusCode == 201) {
       debugPrint('Post added successfully.');
@@ -38,6 +38,21 @@ class ApiServices {
       debugPrint("Failed to add product. Status Code: ${response.statusCode}");
     }
   }
-  
 
+  Future<void> putData() async {
+    PostsModel newPostMode = PostsModel(
+      title: 'Flutter HTTP CRUD',
+      body: 'This is a blog post about HTTP CRUD methods in Flutter',
+      userId: 1,
+    );
+
+    var response = await http.put(Uri.parse("$postsAPI/1"),
+        body: jsonEncode(newPostMode.toJson()));
+
+    if (response.statusCode == 200) {
+      debugPrint('Post updated successfully.');
+    } else {
+      debugPrint("Failed to add product. Status Code: ${response.statusCode}");
+    }
+  }
 }
