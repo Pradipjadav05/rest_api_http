@@ -53,7 +53,9 @@ class _HomeState extends State<Home> {
                 child: ListTile(
                   title: Text("${postModel.title}"),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ApiServices().deleteData();
+                    },
                     icon: const Icon(Icons.delete),
                   ),
                   onTap: (){

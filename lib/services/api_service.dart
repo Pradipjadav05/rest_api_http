@@ -9,17 +9,20 @@ class ApiServices {
   String postsAPI = "https://jsonplaceholder.typicode.com/posts";
 
   Future<List<PostsModel>> getPosts() async {
-    var response = await http.get(Uri.parse(postsAPI));
+    var client = http.Client();
+    var response = await client.get(Uri.parse(postsAPI));
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data = jsonDecode(response.body);
       List<PostsModel> postModel =
           data.map((json) => PostsModel.fromJson(json)).toList();
-
+      client.close();
       return postModel;
     } else {
+      client.close();
       throw Exception('Failed to load posts');
     }
+
   }
 
   Future<void> postData() async {
@@ -51,6 +54,16 @@ class ApiServices {
 
     if (response.statusCode == 200) {
       debugPrint('Post updated successfully.');
+    } else {
+      debugPrint("Failed to add product. Status Code: ${response.statusCode}");
+    }
+  }
+
+  Future<void> deleteData() async {
+    var response = await http.delete(Uri.parse("$postsAPI/1"));
+
+    if (response.statusCode == 200) {
+      debugPrint("post deleted successfully");
     } else {
       debugPrint("Failed to add product. Status Code: ${response.statusCode}");
     }
